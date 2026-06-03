@@ -1,0 +1,10 @@
+---
+description: Two-tier test strategy — Tier 1 headless, Tier 2 on device/simulator
+alwaysApply: false
+---
+
+# Testing
+
+- **Tier 1:** `flutter test` (headless widget/unit). Run via `./script/test.sh` or `flutter test`. Keep green after any logic or test change.
+- **Tier 2:** Integration tests on device/simulator. Run via `./script/test_integration.sh` or `flutter test integration_test/ -d <device_id>`. Default device ID is in TEST_PLAN.md; pass as argument to override.
+- **New runnable behavior:** If the behavior runs on device (e.g. async, native, persistence), add Tier 2 tests and run them before considering the feature done. See TEST_TDD.md and tester skill.
