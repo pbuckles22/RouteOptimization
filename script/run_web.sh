@@ -5,4 +5,6 @@
 set -e
 cd "$(dirname "$0")/.."
 PORT="${1:-8080}"
-flutter run -d web-server --web-port="$PORT" --web-hostname=localhost
+# Set API keys via --dart-define (never commit keys):
+#   --dart-define=MAPS_API_KEY=... --dart-define=MAPBOX_ACCESS_TOKEN=...
+flutter run -d web-server --web-port="$PORT" --web-hostname=localhost "$@"

@@ -9,12 +9,29 @@ Product spec: [`doc/requirements/route-wise-phase1-web-prototype.md`](doc/requir
 ## Quick start
 
 ```bash
-cd MultlocationMapsCreator   # or RouteOptimization after rename
 flutter pub get
 flutter test
-flutter run -d chrome        # Web dev with hot reload
-./script/run_web.sh            # Local web server on port 8080
 ```
+
+### Run RouteWise (internal web testing)
+
+API keys are passed at run time (never commit them):
+
+```powershell
+# Windows — web server on http://localhost:8080
+$env:MAPS_API_KEY = "your-google-maps-key"
+$env:MAPBOX_ACCESS_TOKEN = "your-mapbox-token"
+.\script\run_web.ps1
+```
+
+```bash
+# macOS/Linux — or Chrome with hot reload
+flutter run -d chrome \
+  --dart-define=MAPS_API_KEY=your-google-maps-key \
+  --dart-define=MAPBOX_ACCESS_TOKEN=your-mapbox-token
+```
+
+Search places, add stops (first stop is **Start**), **Optimize route** (distance-based via Mapbox `driving`), then **Launch in Google Maps** with waypoints in order.
 
 **Flutter SDK:** Install from [flutter.dev](https://docs.flutter.dev/get-started/install/windows) or clone stable to `C:\Users\pbuck\flutter` and add `...\flutter\bin` to your user PATH. Run `flutter doctor` to verify Chrome/web support.
 

@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:route_optimization/app/route_wise_app.dart';
+import 'package:route_optimization/config/app_config.dart';
 
 void main() {
-  runApp(const RouteOptimizationApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runRouteWise();
 }
 
-class RouteOptimizationApp extends StatelessWidget {
-  const RouteOptimizationApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Route Optimization',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Route Optimization'),
-        ),
-        body: const Center(
-          child: Text('Replace with your app. Run tests: flutter test'),
-        ),
-      ),
-    );
+/// Entry used by tests and production.
+void runRouteWise() {
+  try {
+    final config = AppConfig.load();
+    runApp(RouteWiseApp(config: config));
+  } on AppConfigException catch (e) {
+    runApp(RouteWiseConfigErrorApp(message: e.message));
   }
 }

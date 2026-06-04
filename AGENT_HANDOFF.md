@@ -35,14 +35,16 @@ Skills that enforce this:
 
 ## Current state
 
-- **App:** Minimal Route Optimization shell; `.cursor` rules/skills in place; `web/` and `ios/` platforms enabled. Implement Phase 1 per `doc/requirements/route-wise-phase1-web-prototype.md`.
+- **App:** Playable RouteWise web prototype on branch `feature/epic-0-s0-1-pubspec-deps` — search (Google Places), stop list, distance optimize (Mapbox `driving`), Google Maps handoff. Keys via `--dart-define=MAPS_API_KEY` / `MAPBOX_ACCESS_TOKEN`. Tier 1: 18 tests green.
+- **Next:** Merge feature branch to `main`; optional Phase 1b traffic profile (`driving-traffic`); docs split (`phase1-spec.md`, `PM_PLAN` epics).
 
 ## Run and test
 
 ```bash
 flutter pub get
-flutter run -d chrome              # Web dev (hot reload in Chrome)
+flutter run -d chrome --dart-define=MAPS_API_KEY=... --dart-define=MAPBOX_ACCESS_TOKEN=...
 ./script/run_web.sh                # Local web server (default port 8080)
+.\script\run_web.ps1               # Windows (reads $env:MAPS_API_KEY, $env:MAPBOX_ACCESS_TOKEN)
 ./script/test.sh                    # Tier 1
 ./script/test.sh --coverage         # Tier 1 + coverage (handoff)
 ./script/test_integration.sh <id>   # Tier 2 (iOS device/simulator)
