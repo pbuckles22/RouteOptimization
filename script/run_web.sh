@@ -5,6 +5,17 @@
 set -e
 cd "$(dirname "$0")/.."
 PORT="${1:-8080}"
-# Set API keys via --dart-define (never commit keys):
-#   --dart-define=MAPS_API_KEY=... --dart-define=MAPBOX_ACCESS_TOKEN=...
-flutter run -d web-server --web-port="$PORT" --web-hostname=localhost "$@"
+shift 2>/dev/null || true
+
+if [ -f .env ]; then
+  set -a
+  # shellcheck disable=SC1091
+  . ./.env
+  set +a
+fi
+
+EXTRA=()
+[ -n "${MAPS_API_KEY:-}" ] && EXTRA+=(--dart-define="MAPS_API_KEY=${MAPS_API_KEY}")
+[ -n "${MAPBOX_ACCESS_TOKEN:-}" ] && EXTRA+=(--dart-define="MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}")
+
+flutter run -d web-server --web-port="$PORT" --web-hostname=localhost "${EXTRA[@]}" "$@"

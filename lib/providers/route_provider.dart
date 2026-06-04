@@ -7,6 +7,7 @@ import 'package:route_optimization/models/route_location.dart';
 import 'package:route_optimization/services/navigation_service.dart';
 import 'package:route_optimization/services/optimization_result.dart';
 import 'package:route_optimization/services/optimization_service.dart';
+import 'package:route_optimization/services/search_proximity.dart';
 import 'package:route_optimization/services/search_service.dart';
 
 class RouteProvider extends ChangeNotifier {
@@ -18,13 +19,15 @@ class RouteProvider extends ChangeNotifier {
     Future<List<RouteLocation>> Function(String query)? searchOverride,
     Future<OptimizationResult> Function(List<RouteLocation> stops)?
         optimizeOverride,
-  })  : _searchService = searchService ?? SearchService(config),
+  })  : _config = config,
+        _searchService = searchService ?? SearchService(config),
         _optimizationService =
             optimizationService ?? OptimizationService(config),
         _navigationService = navigationService ?? NavigationService(),
         _searchOverride = searchOverride,
         _optimizeOverride = optimizeOverride;
 
+  final AppConfig _config;
   final SearchService _searchService;
   final OptimizationService _optimizationService;
   final NavigationService _navigationService;
@@ -40,6 +43,9 @@ class RouteProvider extends ChangeNotifier {
 
   Timer? _debounceTimer;
   String _lastQuery = '';
+  double? _proximityLongitude;
+  double? _proximityLatitude;
+  bool _proximityRequested = false;
 
   bool get canOptimize => activeStops.length >= 2;
 
@@ -71,9 +77,24 @@ class RouteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Call once when the dashboard opens so address search is biased locally.
+  Future<void> ensureSearchProximity() async {
+    if (_proximityRequested) {
+      return;
+    }
+    _proximityRequested = true;
+    final position = await readBrowserProximity();
+    if (position == null) {
+      return;
+    }
+    _proximityLongitude = position.longitude;
+    _proximityLatitude = position.latitude;
+  }
+
   void onSearchQueryChanged(String query) {
     _lastQuery = query;
     _debounceTimer?.cancel();
+    unawaited(ensureSearchProximity());
 
     if (query.trim().isEmpty) {
       searchResults = [];
@@ -95,7 +116,13 @@ class RouteProvider extends ChangeNotifier {
     try {
       final results = _searchOverride != null
           ? await _searchOverride(query)
-          : await _searchService.search(query);
+          : await _searchService.search(
+              query,
+              proximityLongitude:
+                  _proximityLongitude ?? _config.searchProximityLongitude,
+              proximityLatitude:
+                  _proximityLatitude ?? _config.searchProximityLatitude,
+            );
       if (query != _lastQuery) {
         return;
       }
@@ -107,15 +134,28 @@ class RouteProvider extends ChangeNotifier {
       }
       searchResults = [];
       currentState = AppState.error;
-      errorMessage = e.toString();
+      errorMessage = _userFacingError(e);
     }
     notifyListeners();
   }
 
-  void selectSearchResult(RouteLocation stop) {
-    addStop(stop);
-    searchResults = [];
-    _lastQuery = '';
+  Future<void> selectSearchResult(RouteLocation stop) async {
+    currentState = AppState.searching;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final resolved = _searchOverride != null
+          ? stop
+          : await _searchService.resolvePlace(stop.uuid);
+      addStop(resolved);
+      searchResults = [];
+      _lastQuery = '';
+      currentState = AppState.idle;
+    } catch (e) {
+      currentState = AppState.error;
+      errorMessage = _userFacingError(e);
+    }
     notifyListeners();
   }
 
@@ -137,9 +177,24 @@ class RouteProvider extends ChangeNotifier {
       currentState = AppState.success;
     } catch (e) {
       currentState = AppState.error;
-      errorMessage = e.toString();
+      errorMessage = _userFacingError(e);
     }
     notifyListeners();
+  }
+
+  static String _userFacingError(Object error) {
+    if (error is SearchException) {
+      return error.message;
+    }
+    final text = error.toString();
+    if (text.contains('Failed to fetch') || text.contains('ClientException')) {
+      return 'Search could not reach the server. Start the places proxy: '
+          'dart run tool/places_proxy.dart';
+    }
+    if (text.contains('Places proxy')) {
+      return error.toString().replaceFirst('SearchException: ', '');
+    }
+    return 'Something went wrong. Please try again.';
   }
 
   Future<void> launchGoogleMaps() async {

@@ -44,5 +44,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Local secrets (copy .env.example to .env)
+.env
+
 # Local handoff notes (keep template _template.md and README in repo)
 .cursor/handoff/handoff-*.md

@@ -14,6 +14,14 @@ class _RouteDashboardState extends State<RouteDashboard> {
   final _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<RouteProvider>().ensureSearchProximity();
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -74,7 +82,7 @@ class _StopsPanel extends StatelessWidget {
                 controller: searchController,
                 decoration: const InputDecoration(
                   labelText: 'Search places',
-                  hintText: 'Name or address (e.g. McDonald\'s)',
+                  hintText: 'Address or business (e.g. 2314 Johnson Ave, McDonald\'s)',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
                 ),
@@ -98,8 +106,8 @@ class _StopsPanel extends StatelessWidget {
                       return ListTile(
                         title: Text(result.name),
                         subtitle: Text(result.formattedAddress),
-                        onTap: () {
-                          provider.selectSearchResult(result);
+                        onTap: () async {
+                          await provider.selectSearchResult(result);
                           searchController.clear();
                         },
                       );

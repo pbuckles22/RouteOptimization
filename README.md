@@ -15,14 +15,19 @@ flutter test
 
 ### Run RouteWise (internal web testing)
 
-API keys are passed at run time (never commit them):
+API keys live in a **gitignored** `.env` at the project root (copy from `.env.example`):
+
+```env
+MAPS_API_KEY=your-google-places-key
+MAPBOX_ACCESS_TOKEN=pk.your-mapbox-token
+```
 
 ```powershell
-# Windows — web server on http://localhost:8080
-$env:MAPS_API_KEY = "your-google-maps-key"
-$env:MAPBOX_ACCESS_TOKEN = "your-mapbox-token"
+# Windows — loads .env, opens Chrome (recommended; avoids blank web-server page)
 .\script\run_web.ps1
 ```
+
+If you only want a headless server: `.\script\run_web.ps1 -ServerOnly` then open **http://localhost:8080** after “being served” appears.
 
 ```bash
 # macOS/Linux — or Chrome with hot reload
@@ -31,7 +36,9 @@ flutter run -d chrome \
   --dart-define=MAPBOX_ACCESS_TOKEN=your-mapbox-token
 ```
 
-Search places, add stops (first stop is **Start**), **Optimize route** (distance-based via Mapbox `driving`), then **Launch in Google Maps** with waypoints in order.
+Search uses **Google Places** via a local proxy (addresses + businesses, like Google Maps). `.\script\run_web.ps1` starts the proxy automatically. Add stops (first = **Start**), **Optimize route**, then **Launch in Google Maps**.
+
+If search fails, run the proxy manually: `dart run tool/places_proxy.dart` (keep it running in a second terminal).
 
 **Flutter SDK:** Install from [flutter.dev](https://docs.flutter.dev/get-started/install/windows) or clone stable to `C:\Users\pbuck\flutter` and add `...\flutter\bin` to your user PATH. Run `flutter doctor` to verify Chrome/web support.
 
