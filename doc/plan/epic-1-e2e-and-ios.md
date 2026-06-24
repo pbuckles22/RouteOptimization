@@ -1,7 +1,7 @@
 # Epic 1 — E2E automation & iOS path
 
-**Branch:** TBD (`feature/epic-1-e2e-ios` suggested)  
-**Status:** 🔲 Next
+**Branch:** `feature/epic-1-e2e-ios`  
+**Status:** 🔲 In progress (E1-S1 done)
 
 ## Goal
 
@@ -13,14 +13,15 @@ See [TEST_PLAN.md](../../TEST_PLAN.md) for tier definitions.
 
 ## Stories
 
-### E1-S1 — Tier 2 web E2E happy path 🔲
+### E1-S1 — Tier 2 web E2E happy path ✅
 
 **Acceptance criteria:**
 
-- [ ] `integration_test/route_flow_test.dart` — mocked search + optimize
-- [ ] Flow: type search → pick result → add stops → optimize → success + Launch enabled
-- [ ] `bash script/test_e2e_web.sh` runs green on Chrome
-- [ ] No live API keys or `places_proxy` required for this test
+- [x] `e2e/playwright/tests/route-flow.spec.ts` — Playwright in Chrome/Edge; mocks proxy + Mapbox
+- [x] `test/e2e/route_flow_test.dart` — fast headless duplicate for CI without Node
+- [x] Flow: type search → pick result → add stops → optimize → success + Launch enabled
+- [x] `bash script/test_e2e_web.sh` runs Playwright (starts web server automatically)
+- [x] No live API keys or `places_proxy` process required
 
 **Validation:** `bash script/test_e2e_web.sh`
 

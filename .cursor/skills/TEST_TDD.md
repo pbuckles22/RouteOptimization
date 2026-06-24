@@ -4,7 +4,12 @@
 
 - **Black-box:** Assert on behavior (public API: inputs and outputs). Do not depend on implementation details. See [tester/SKILL.md](tester/SKILL.md).
 - **Continuous:** Run `flutter test` after adding or changing logic or tests; keep the suite green.
-- **Hybrid (TEST_PLAN.md):** **Tier 1** — `flutter test` (headless). **Tier 2** — `flutter test integration_test/ -d <device_id>`. Run both when validating.
+- **Hybrid (TEST_PLAN.md):** **Tier 1** — `flutter test` (headless). **Tier 2** — `bash script/test_e2e_web.sh` (Playwright + auto web server). **Tier 3** — `bash script/test_integration.sh` (iOS simulator). Run the tiers that match your change.
+
+## Server lifecycle
+
+- **Tier 2:** Playwright starts and stops the web app on port 8080. Do not manually run `run_web.sh` for E2E. After Dart/UI edits: `E2E_FRESH_SERVER=1 bash script/test_e2e_web.sh`.
+- **Manual / live search:** `bash script/run_dev_harness.sh` starts places proxy (8765) + web (8080); stop with Ctrl+C.
 
 ## Test-first (mandatory for new behavior)
 

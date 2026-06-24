@@ -40,7 +40,7 @@
 
 **Epic:** [doc/plan/epic-1-e2e-and-ios.md](doc/plan/epic-1-e2e-and-ios.md)
 
-- [ ] **E1-S1** Tier 2 web E2E happy path (`integration_test/route_flow_test.dart`)
+- [x] **E1-S1** Tier 2 browser E2E (`e2e/playwright/`, `test/e2e/`, `bash script/test_e2e_web.sh`)
 - [ ] **E1-S2** iOS device location for search bias
 - [ ] **E1-S3** Tier 3 iOS integration tests
 - [ ] **E1-S4** Mapbox `driving-traffic` profile

@@ -14,7 +14,7 @@
 | Epic | Branch (if any) | Status |
 |------|-----------------|--------|
 | [Epic 0 — Route core](epic-0-route-core.md) | `feature/epic-0-s0-1-pubspec-deps` | ✅ Complete (on `main`) |
-| [Epic 1 — E2E automation & iOS path](epic-1-e2e-and-ios.md) | TBD | **Active** |
+| [Epic 1 — E2E automation & iOS path](epic-1-e2e-and-ios.md) | `feature/epic-1-e2e-ios` | In progress (E1-S1 ✅) |
 
 ## Story ID format
 

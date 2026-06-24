@@ -13,7 +13,7 @@ if [ -z "$DEVICE_ID" ]; then
   echo "Or set DEFAULT_DEVICE_ID in this script."
   exit 1
 fi
-flutter test integration_test/app_test.dart -d "$DEVICE_ID" --reporter expanded 2>&1 | awk '
+flutter test integration_test/ -d "$DEVICE_ID" --reporter expanded 2>&1 | awk '
   /^[0-9]+:[0-9]+ \+[0-9]+: / {
     name = $0
     sub(/^[0-9]+:[0-9]+ \+[0-9]+: /, "", name)

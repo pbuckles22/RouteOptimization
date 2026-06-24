@@ -39,6 +39,10 @@ Future<void> _handle(HttpRequest request, String apiKey) async {
 
   try {
     switch (request.uri.path) {
+      case '/health':
+        request.response.statusCode = HttpStatus.ok;
+        request.response.write('ok');
+        await request.response.close();
       case '/search':
         await _handleSearch(request, apiKey);
       case '/details':

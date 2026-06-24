@@ -47,5 +47,12 @@ app.*.map.json
 # Local secrets (copy .env.example to .env)
 .env
 
+# Playwright
+e2e/playwright/node_modules/
+e2e/playwright/test-results/
+e2e/playwright/playwright-report/
+e2e/playwright/blob-report/
+e2e/playwright/.cache/
+
 # Local handoff notes (keep template _template.md and README in repo)
 .cursor/handoff/handoff-*.md

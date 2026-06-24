@@ -48,8 +48,8 @@ Skills that enforce this:
 
 - **Ship target:** iOS app. See **PM_PLAN.md → Platform strategy** and **doc/PROJECT_STATUS.md**.
 - **App:** RouteWise on **`main`** — search, stop list, Mapbox optimize (`driving`), Google Maps handoff. Epic 0 complete ([doc/plan/epic-0-route-core.md](doc/plan/epic-0-route-core.md)).
-- **Tests:** Tier 1 — 20 green. Tier 2 web E2E planned ([doc/plan/epic-1-e2e-and-ios.md](doc/plan/epic-1-e2e-and-ios.md) E1-S1).
-- **Next:** Epic 1 — Tier 2 web E2E happy path, then iOS location + Tier 3 integration.
+- **Tests:** Tier 1 — 21 green. Tier 2 Playwright — 1 green (`bash script/test_e2e_web.sh`). Tier 3 — `integration_test/route_flow_test.dart` green on iOS sim.
+- **Next:** Epic 1 E1-S2 — iOS device location; finish E1-S3 (DEFAULT_DEVICE_ID, native-path tests).
 
 ## Run and test
 
@@ -66,8 +66,8 @@ flutter run -d <ios_simulator_or_device> \
 **Dev-only (browser harness — not the product):**
 
 ```bash
-dart run tool/places_proxy.dart            # required for web search (CORS)
-bash script/run_web.sh                     # http://localhost:8080
+bash script/run_dev_harness.sh           # places proxy (8765) + web (8080); Ctrl+C stops both
+bash script/test_e2e_web.sh              # Tier 2 Playwright (auto-starts web; mocked APIs)
 ```
 
 ```bash

@@ -8,8 +8,10 @@ alwaysApply: false
 See **TEST_PLAN.md** for full strategy. Summary:
 
 - **Tier 1:** `flutter test` (headless unit/widget/service). Run via `bash script/test.sh`. **Required** after every logic or test change. Merge-ready minimum.
-- **Tier 2:** Web E2E on Chrome — `bash script/test_e2e_web.sh` (mocked APIs). Before merge when UI flows change.
+- **Tier 2:** Web E2E — `bash script/test_e2e_web.sh`. Playwright **starts/stops** the web server on 8080; network mocked in browser. Use `E2E_FRESH_SERVER=1` after app changes. Before merge when UI flows change.
 - **Tier 3:** iOS integration on simulator/device — `bash script/test_integration.sh <device_id>`. When native paths change (GPS, url_launcher, direct Places).
-- **Tier 4:** Live API smoke — manual; see TEST_PLAN.md.
+- **Tier 4:** Live API smoke — `bash script/run_dev_harness.sh` (proxy + web); manual checklist in TEST_PLAN.md.
+
+**Agents:** Do not background `run_web.sh` for testing — use Tier 2 or `run_dev_harness.sh` so servers are owned by the test/dev script.
 
 **New runnable behavior:** TDD per TEST_TDD.md and tester skill. Add Tier 2 or Tier 3 tests before marking story done.

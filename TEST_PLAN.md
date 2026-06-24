@@ -36,17 +36,26 @@ flutter test --reporter expanded
 
 ---
 
-## Tier 2: Web E2E (automated full flows)
+## Tier 2: Playwright browser E2E (Chrome / Edge)
 
-**Runs:** Flutter Web — `chrome` or `web-server` device. **Works on Windows** (no Mac simulator required).
+**Runs:** real browser via [Playwright](https://playwright.dev/) against `http://localhost:8080`. **Not** Flutter `integration_test` (web is unsupported). **Works on Windows and Mac.**
 
 ```bash
-# Planned — add integration_test/route_flow_test.dart first
-flutter test integration_test/ -d chrome --reporter expanded
-# Or: bash script/test_e2e_web.sh
+bash script/test_e2e_web.sh
+# Optional: PW_CHANNEL=msedge | chrome
 ```
 
-**Purpose:** Exercise the **same UI and provider flow** as manual localhost:8080 testing, but with **injected mocks** so CI needs no API keys and no `places_proxy`.
+**How it works:**
+
+- Playwright **starts and stops** the app (`script/run_web_e2e.sh` → static build + `http.server` on 8080). No manual `run_web.sh` for E2E.
+- After app code changes, rebuild: `E2E_FRESH_SERVER=1 bash script/test_e2e_web.sh`
+- Tests run in **Chromium** (default), **Chrome**, or **Edge** (`PW_CHANNEL`)
+- Network to Places proxy (`127.0.0.1:8765`) and Mapbox is **mocked in the browser** — no `places_proxy` process, no live API keys (CI-safe)
+- **Manual live search:** `bash script/run_dev_harness.sh` — starts real places proxy + Flutter web; stop with Ctrl+C
+
+**Also:** `test/e2e/route_flow_test.dart` — fast headless UI flow (same scenario, VM). Run via `flutter test test/e2e/`. Use Playwright for true browser validation.
+
+**iOS:** `integration_test/route_flow_test.dart` runs on simulator via Tier 3.
 
 **Planned scenarios (implement in order):**
 
@@ -133,7 +142,7 @@ Update goldens: `flutter test integration_test/golden_test.dart -d <id> --update
 | Tier | Status |
 |------|--------|
 | 1 | ✅ 20 tests green |
-| 2 | 🔲 Plan defined; `route_flow_test.dart` not yet written |
+| 2 | ✅ Playwright `e2e/playwright/tests/route-flow.spec.ts` + fast `test/e2e/` |
 | 3 | 🔲 `app_test.dart` only checks title; expand for iOS paths |
 | 4 | 🔲 Manual checklist above |
 

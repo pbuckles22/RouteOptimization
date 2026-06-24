@@ -18,7 +18,7 @@
 
 | Branch | Role |
 |--------|------|
-| **`main`** | Integration branch — RouteWise app + agentic docs (post Epic 0 merge) |
+| **`main`** | Integration branch — RouteWise app + agentic docs (Epic 0 ✅; Epic 1 E1-S1 ✅) |
 
 Feature branches: `feature/<epic-story-topic>` per [github-feature-workflow](../.cursor/skills/github-feature-workflow/SKILL.md).
 
@@ -33,7 +33,7 @@ See [doc/plan/epic-0-route-core.md](plan/epic-0-route-core.md).
 - RouteWise dashboard: search, stop list, optimize, Google Maps launch
 - Services: Search, Optimization (Mapbox `driving`), Navigation
 - AppConfig + `.env.example`; Places proxy for **web dev only**
-- Tier 1: 20 tests green
+- Tier 1: 21 tests green
 - Mapbox optimize fix (`destination=last`)
 - Agentic alignment: CONTRIBUTING, PROJECT_STATUS, epic docs, TEST_PLAN tiers
 
@@ -41,14 +41,14 @@ See [doc/plan/epic-0-route-core.md](plan/epic-0-route-core.md).
 
 ## Next up
 
-### Epic 1 — E2E automation & iOS path
+### Epic 1 — E2E automation & iOS path (in progress)
 
 See [doc/plan/epic-1-e2e-and-ios.md](plan/epic-1-e2e-and-ios.md).
 
-1. **E1-S1** — Tier 2 web E2E happy path (mocked APIs)
-2. **E1-S2** — iOS device location for search bias
-3. **E1-S3** — Tier 3 iOS integration tests
-4. **E1-S4** — Mapbox `driving-traffic` profile
+- **E1-S1 ✅** — Playwright browser E2E + fast `test/e2e/` harness
+- **E1-S2** — iOS device location for search bias
+- **E1-S3** — Tier 3 iOS integration tests (partial: happy-path `route_flow_test.dart` green)
+- **E1-S4** — Mapbox `driving-traffic` profile
 
 ---
 
