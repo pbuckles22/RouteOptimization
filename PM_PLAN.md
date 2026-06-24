@@ -9,7 +9,7 @@
 | Layer | iOS (canonical) | Web (dev testing only) |
 |-------|-----------------|-------------------------|
 | Search | Google Places API direct (`SearchBackend.googlePlaces`) | Local CORS proxy (`dart run tool/places_proxy.dart`) because browsers block direct Google calls |
-| Location bias | Device GPS (CoreLocation — **TODO**, Epic 1) | Browser geolocation (`search_proximity_web.dart`) |
+| Location bias | Device GPS (`geolocator` / `search_proximity_io.dart`) | Browser geolocation (`search_proximity_web.dart`) |
 | Optimize | Mapbox Optimization API (HTTP from app) | Same |
 | Navigation | `url_launcher` → Google Maps app | `url_launcher` → new browser tab |
 
@@ -41,7 +41,7 @@
 **Epic:** [doc/plan/epic-1-e2e-and-ios.md](doc/plan/epic-1-e2e-and-ios.md)
 
 - [x] **E1-S1** Tier 2 browser E2E (`e2e/playwright/`, `test/e2e/`, `bash script/test_e2e_web.sh`)
-- [ ] **E1-S2** iOS device location for search bias
+- [x] **E1-S2** iOS device location for search bias
 - [ ] **E1-S3** Tier 3 iOS integration tests
 - [ ] **E1-S4** Mapbox `driving-traffic` profile
 

@@ -27,13 +27,13 @@ See [TEST_PLAN.md](../../TEST_PLAN.md) for tier definitions.
 
 ---
 
-### E1-S2 — iOS device location for search bias 🔲
+### E1-S2 — iOS device location for search bias ✅
 
 **Acceptance criteria:**
 
-- [ ] Replace `search_proximity_stub` no-op on iOS with device GPS (e.g. `geolocator`)
-- [ ] Proximity passed to `SearchService.search` on iOS
-- [ ] Tier 1 test with injected coordinates; manual verify on simulator optional
+- [x] Replace `search_proximity_stub` no-op on iOS with device GPS (e.g. `geolocator`)
+- [x] Proximity passed to `SearchService.search` on iOS
+- [x] Tier 1 test with injected coordinates; manual verify on simulator optional
 
 **Validation:** Tier 1 green; search ranks local results when location allowed on device
 

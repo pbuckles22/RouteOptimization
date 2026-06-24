@@ -18,7 +18,7 @@
 
 | Branch | Role |
 |--------|------|
-| **`main`** | Integration branch — RouteWise app + agentic docs (Epic 0 ✅; Epic 1 E1-S1 ✅) |
+| **`main`** | Integration branch — RouteWise app + agentic docs (Epic 0 ✅; Epic 1 E1-S1 ✅, E1-S2 ✅) |
 
 Feature branches: `feature/<epic-story-topic>` per [github-feature-workflow](../.cursor/skills/github-feature-workflow/SKILL.md).
 
@@ -46,7 +46,7 @@ See [doc/plan/epic-0-route-core.md](plan/epic-0-route-core.md).
 See [doc/plan/epic-1-e2e-and-ios.md](plan/epic-1-e2e-and-ios.md).
 
 - **E1-S1 ✅** — Playwright browser E2E + fast `test/e2e/` harness
-- **E1-S2** — iOS device location for search bias
+- **E1-S2 ✅** — iOS device location for search bias (`geolocator`, `search_proximity_io.dart`)
 - **E1-S3** — Tier 3 iOS integration tests (partial: happy-path `route_flow_test.dart` green)
 - **E1-S4** — Mapbox `driving-traffic` profile
 

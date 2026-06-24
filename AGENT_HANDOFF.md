@@ -48,8 +48,8 @@ Skills that enforce this:
 
 - **Ship target:** iOS app. See **PM_PLAN.md → Platform strategy** and **doc/PROJECT_STATUS.md**.
 - **App:** RouteWise on **`main`** — search, stop list, Mapbox optimize (`driving`), Google Maps handoff. Epic 0 complete ([doc/plan/epic-0-route-core.md](doc/plan/epic-0-route-core.md)).
-- **Tests:** Tier 1 — 21 green. Tier 2 Playwright — 1 green (`bash script/test_e2e_web.sh`). Tier 3 — `integration_test/route_flow_test.dart` green on iOS sim.
-- **Next:** Epic 1 E1-S2 — iOS device location; finish E1-S3 (DEFAULT_DEVICE_ID, native-path tests).
+- **Tests:** Tier 1 — 22 green. Tier 2 Playwright — 1 green (`bash script/test_e2e_web.sh`). Tier 3 — `integration_test/route_flow_test.dart` green on iOS sim.
+- **Next:** Epic 1 E1-S3 — finish Tier 3 (`DEFAULT_DEVICE_ID`, native-path tests).
 
 ## Run and test
 

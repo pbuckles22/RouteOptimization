@@ -19,13 +19,15 @@ class RouteProvider extends ChangeNotifier {
     Future<List<RouteLocation>> Function(String query)? searchOverride,
     Future<OptimizationResult> Function(List<RouteLocation> stops)?
         optimizeOverride,
+    Future<({double longitude, double latitude})?> Function()? proximityReader,
   })  : _config = config,
         _searchService = searchService ?? SearchService(config),
         _optimizationService =
             optimizationService ?? OptimizationService(config),
         _navigationService = navigationService ?? NavigationService(),
         _searchOverride = searchOverride,
-        _optimizeOverride = optimizeOverride;
+        _optimizeOverride = optimizeOverride,
+        _proximityReader = proximityReader;
 
   final AppConfig _config;
   final SearchService _searchService;
@@ -34,6 +36,8 @@ class RouteProvider extends ChangeNotifier {
   final Future<List<RouteLocation>> Function(String query)? _searchOverride;
   final Future<OptimizationResult> Function(List<RouteLocation> stops)?
       _optimizeOverride;
+  final Future<({double longitude, double latitude})?> Function()?
+      _proximityReader;
 
   AppState currentState = AppState.idle;
   List<RouteLocation> activeStops = [];
@@ -83,7 +87,8 @@ class RouteProvider extends ChangeNotifier {
       return;
     }
     _proximityRequested = true;
-    final position = await readBrowserProximity();
+    final readProximity = _proximityReader ?? readBrowserProximity;
+    final position = await readProximity();
     if (position == null) {
       return;
     }

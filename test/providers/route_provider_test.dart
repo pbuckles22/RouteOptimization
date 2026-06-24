@@ -3,7 +3,27 @@ import 'package:route_optimization/models/app_state.dart';
 import 'package:route_optimization/models/route_location.dart';
 import 'package:route_optimization/providers/route_provider.dart';
 import 'package:route_optimization/services/optimization_result.dart';
+import 'package:route_optimization/services/search_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+class _RecordingSearchService extends SearchService {
+  _RecordingSearchService(
+    super.config, {
+    required this.onSearch,
+  });
+
+  final void Function(String query, double? lng, double? lat) onSearch;
+
+  @override
+  Future<List<RouteLocation>> search(
+    String query, {
+    double? proximityLongitude,
+    double? proximityLatitude,
+  }) async {
+    onSearch(query, proximityLongitude, proximityLatitude);
+    return [];
+  }
+}
 
 void main() {
   late AppConfig config;
@@ -81,6 +101,31 @@ void main() {
       ),
     );
     expect(provider.canOptimize, isTrue);
+  });
+
+  test('passes device proximity to search when proximity reader returns coords',
+      () async {
+    double? capturedLng;
+    double? capturedLat;
+
+    final provider = RouteProvider(
+      config: config,
+      searchService: _RecordingSearchService(
+        config,
+        onSearch: (query, lng, lat) {
+          capturedLng = lng;
+          capturedLat = lat;
+        },
+      ),
+      proximityReader: () async => (longitude: -122.4, latitude: 37.8),
+    );
+
+    await provider.ensureSearchProximity();
+    provider.onSearchQueryChanged('coffee');
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+
+    expect(capturedLng, -122.4);
+    expect(capturedLat, 37.8);
   });
 
   test('optimize reorders stops and sets success state', () async {
