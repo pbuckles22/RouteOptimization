@@ -3,7 +3,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Local CORS proxy for Google Places Autocomplete + Details (internal web only).
+/// Local CORS proxy for Google Places Autocomplete + Details.
+/// **Dev-only:** Flutter Web testing (browser CORS). Not used on iOS.
 /// Usage: dart run tool/places_proxy.dart
 Future<void> main() async {
   final apiKey = _resolveMapsApiKey();

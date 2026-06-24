@@ -95,23 +95,25 @@ class _StopsPanel extends StatelessWidget {
                 ),
               if (provider.searchResults.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Material(
-                  elevation: 2,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: provider.searchResults.length,
-                    separatorBuilder: (_, _) => const Divider(height: 1),
-                    itemBuilder: (context, index) {
-                      final result = provider.searchResults[index];
-                      return ListTile(
-                        title: Text(result.name),
-                        subtitle: Text(result.formattedAddress),
-                        onTap: () async {
-                          await provider.selectSearchResult(result);
-                          searchController.clear();
-                        },
-                      );
-                    },
+                Flexible(
+                  child: Material(
+                    elevation: 2,
+                    clipBehavior: Clip.antiAlias,
+                    child: ListView.separated(
+                      itemCount: provider.searchResults.length,
+                      separatorBuilder: (_, _) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final result = provider.searchResults[index];
+                        return ListTile(
+                          title: Text(result.name),
+                          subtitle: Text(result.formattedAddress),
+                          onTap: () async {
+                            await provider.selectSearchResult(result);
+                            searchController.clear();
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

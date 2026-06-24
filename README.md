@@ -1,8 +1,10 @@
 # Route Optimization
 
-Flutter **RouteWise Phase 1** web prototype, bootstrapped from [FlutterAgenticTemplate](https://github.com/pbuckles22/FlutterAgenticTemplate) with Cursor rules, skills, handoff protocol, and test setup.
+Flutter **RouteWise** — **iOS app** (Route Optimization), bootstrapped from [FlutterAgenticTemplate](https://github.com/pbuckles22/FlutterAgenticTemplate) with Cursor rules, skills, handoff protocol, and test setup.
 
-Product spec: [`doc/requirements/route-wise-phase1-web-prototype.md`](doc/requirements/route-wise-phase1-web-prototype.md).
+**Ship target:** iOS. **Flutter Web + `tool/places_proxy.dart`** are dev-only for testing map flows in a browser—not the product. See **PM_PLAN.md → Platform strategy**.
+
+Product spec: [`doc/requirements/route-wise-phase1-web-prototype.md`](doc/requirements/route-wise-phase1-web-prototype.md) (legacy filename; platform truth is PM_PLAN).
 
 **Not using Flutter?** Use the stack-agnostic template instead: [AgenticTemplate](https://github.com/pbuckles22/AgenticTemplate) (browser extensions, CLIs, backends, etc.). This repo is the Flutter scaffold plus the same style of agentic layer.
 
@@ -13,34 +15,29 @@ flutter pub get
 flutter test
 ```
 
-### Run RouteWise (internal web testing)
-
-API keys live in a **gitignored** `.env` at the project root (copy from `.env.example`):
-
-```env
-MAPS_API_KEY=your-google-places-key
-MAPBOX_ACCESS_TOKEN=pk.your-mapbox-token
-```
-
-```powershell
-# Windows — loads .env, opens Chrome (recommended; avoids blank web-server page)
-.\script\run_web.ps1
-```
-
-If you only want a headless server: `.\script\run_web.ps1 -ServerOnly` then open **http://localhost:8080** after “being served” appears.
+### Run on iOS (primary)
 
 ```bash
-# macOS/Linux — or Chrome with hot reload
-flutter run -d chrome \
-  --dart-define=MAPS_API_KEY=your-google-maps-key \
-  --dart-define=MAPBOX_ACCESS_TOKEN=your-mapbox-token
+flutter pub get
+flutter run -d <ios_simulator_or_device> \
+  --dart-define=MAPS_API_KEY=your-google-places-key \
+  --dart-define=MAPBOX_ACCESS_TOKEN=pk.your-mapbox-token
 ```
 
-Search uses **Google Places** via a local proxy (addresses + businesses, like Google Maps). `.\script\run_web.ps1` starts the proxy automatically. Add stops (first = **Start**), **Optimize route**, then **Launch in Google Maps**.
+Keys in a gitignored `.env` at project root (copy from `.env.example`). Pass via `--dart-define` or use your IDE launch config.
 
-If search fails, run the proxy manually: `dart run tool/places_proxy.dart` (keep it running in a second terminal).
+Add stops (first = **Start**), **Optimize route**, then **Launch in Google Maps**.
 
-**Flutter SDK:** Install from [flutter.dev](https://docs.flutter.dev/get-started/install/windows) or clone stable to `C:\Users\pbuck\flutter` and add `...\flutter\bin` to your user PATH. Run `flutter doctor` to verify Chrome/web support.
+### Dev-only: browser testing (not the ship target)
+
+Use when you want to test map flows without an iOS simulator. Requires the local Places proxy (browsers block direct Google API calls).
+
+```bash
+dart run tool/places_proxy.dart          # terminal 1
+bash script/run_web.sh                   # terminal 2 → http://localhost:8080
+```
+
+Windows: `.\script\run_web.ps1` (starts proxy + Chrome).
 
 **Tier 2 (integration tests):** Set `DEFAULT_DEVICE_ID` in `script/test_integration.sh` or run `./script/test_integration.sh <device_id>` (iOS).
 
@@ -156,6 +153,9 @@ So: **out of the box** you get a working Flutter app and run/tests; **after a Fl
 
 ## Docs
 
+- [CONTRIBUTING.md](CONTRIBUTING.md) — reading order, merge-ready gate, how we roll
+- [doc/PROJECT_STATUS.md](doc/PROJECT_STATUS.md) — current state, active epic
+- [doc/plan/](doc/plan/) — epics and stories
 - [AGENT_HANDOFF.md](AGENT_HANDOFF.md) — for AI and context handoff; run/test and conventions
 - [TEST_PLAN.md](TEST_PLAN.md) — Tier 1 vs Tier 2, device ID
 - [PM_PLAN.md](PM_PLAN.md) — replace with your phases/sprints

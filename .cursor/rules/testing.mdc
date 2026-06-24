@@ -1,10 +1,15 @@
 ---
-description: Two-tier test strategy — Tier 1 headless, Tier 2 on device/simulator
+description: Test tiers — Tier 1 headless, Tier 2 web E2E, Tier 3 iOS integration
 alwaysApply: false
 ---
 
 # Testing
 
-- **Tier 1:** `flutter test` (headless widget/unit). Run via `./script/test.sh` or `flutter test`. Keep green after any logic or test change.
-- **Tier 2:** Integration tests on device/simulator. Run via `./script/test_integration.sh` or `flutter test integration_test/ -d <device_id>`. Default device ID is in TEST_PLAN.md; pass as argument to override.
-- **New runnable behavior:** If the behavior runs on device (e.g. async, native, persistence), add Tier 2 tests and run them before considering the feature done. See TEST_TDD.md and tester skill.
+See **TEST_PLAN.md** for full strategy. Summary:
+
+- **Tier 1:** `flutter test` (headless unit/widget/service). Run via `bash script/test.sh`. **Required** after every logic or test change. Merge-ready minimum.
+- **Tier 2:** Web E2E on Chrome — `bash script/test_e2e_web.sh` (mocked APIs). Before merge when UI flows change.
+- **Tier 3:** iOS integration on simulator/device — `bash script/test_integration.sh <device_id>`. When native paths change (GPS, url_launcher, direct Places).
+- **Tier 4:** Live API smoke — manual; see TEST_PLAN.md.
+
+**New runnable behavior:** TDD per TEST_TDD.md and tester skill. Add Tier 2 or Tier 3 tests before marking story done.

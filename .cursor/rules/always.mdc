@@ -3,8 +3,10 @@ description: Project context — apply in every session
 alwaysApply: true
 ---
 
-# Flutter Agentic Template
+# Flutter Agentic Template — RouteWise
 
-Flutter/Dart project (web-first for Phase 1; iOS for later native retrofit; no Android). Source of truth: PM_PLAN.md, AGENT_HANDOFF.md; .cursor/skills/ (DEV_GUIDE, TEST_TDD, DESIGN_SYSTEM, techwriter, tester). Use techwriter for docs; use tester + .cursor/rules/testing.mdc for black-box, continuous tests. **New behavior:** Read TEST_TDD.md and tester skill first; write a failing test before production code (TDD). **Handoff:** When the user wants a handoff, run code review (code-reviewer), tech debt (tech-debt-evaluator), and `flutter test --coverage`; record in the handoff note. See AGENT_HANDOFF.md and .cursor/rules/handoff-checklist.mdc — do not skip.
+**Ship target: iOS app.** Flutter Web and `tool/places_proxy.dart` are **dev-only** harnesses to test map/search/optimize in a browser—not the product. Before every code change, read **PM_PLAN.md → Platform strategy** and ask: *Is this for iOS, or only for web dev testing?* Do not add web-only behavior unless explicitly scoped as dev harness or it also serves iOS.
+
+Flutter/Dart project (iOS ship target; no Android). Source of truth: **PM_PLAN.md** (platform strategy + epics), **AGENT_HANDOFF.md**; `.cursor/skills/` (DEV_GUIDE, TEST_TDD, DESIGN_SYSTEM, techwriter, tester). Use techwriter for docs; use tester + `.cursor/rules/testing.mdc` for black-box, continuous tests. **New behavior:** Read TEST_TDD.md and tester skill first; write a failing test before production code (TDD). **Handoff:** When the user wants a handoff, run code review (code-reviewer), tech debt (tech-debt-evaluator), and `flutter test --coverage`; record in the handoff note. See AGENT_HANDOFF.md and `.cursor/rules/handoff-checklist.mdc` — do not skip.
 
 **Non-Flutter work** (extensions, CLIs, other stacks): use the stack-agnostic [AgenticTemplate](https://github.com/pbuckles22/AgenticTemplate) repo — same agentic discipline without a Flutter scaffold.

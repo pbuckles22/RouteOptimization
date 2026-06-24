@@ -1,5 +1,7 @@
 # MASTER_BLUEPRINT: RouteWise Phase 1 (Web Prototype)
 
+> **Platform note (2026):** The **ship target is iOS**. This doc describes shared map/search/optimize behavior. **PM_PLAN.md → Platform strategy** supersedes “web-first” wording below. Flutter Web and `tool/places_proxy.dart` are **dev-only** harnesses—not the product architecture.
+
 ## ==========================================
 ## PART 1: SYSTEM SPECIFICATIONS (The Guardrails)
 ## ==========================================

@@ -37,7 +37,8 @@ class OptimizationService {
       {
         'access_token': config.mapboxAccessToken,
         'source': 'first',
-        'destination': 'any',
+        // Mapbox returns NotImplemented for destination=any + roundtrip=false.
+        'destination': 'last',
         'roundtrip': 'false',
       },
     );

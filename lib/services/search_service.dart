@@ -14,7 +14,7 @@ class SearchException implements Exception {
   String toString() => 'SearchException: $message';
 }
 
-/// Web: Google via local proxy, then Mapbox fallback. Native: Google Places direct.
+/// **iOS (canonical):** Google Places direct. **Web (dev only):** local proxy + Mapbox fallback.
 enum SearchBackend { googlePlaces, mapboxGeocoding, googlePlacesProxy }
 
 class SearchService {
@@ -36,7 +36,7 @@ class SearchService {
   static const String defaultPlacesProxyBaseUrl = 'http://127.0.0.1:8765';
 
   static SearchBackend get _defaultBackend => kIsWeb
-      ? SearchBackend.googlePlacesProxy
+      ? SearchBackend.googlePlacesProxy // dev harness only; iOS uses googlePlaces
       : SearchBackend.googlePlaces;
 
   static String? get _defaultProxyBaseUrl =>

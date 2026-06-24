@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repo is **Route Optimization** (RouteWise Phase 1): a **web-first** Flutter app with Cursor rules, skills, handoff protocol, and tests. Phase 1 targets Flutter Web; the iOS scaffold remains for a later native retrofit.
+This repo is **Route Optimization** (RouteWise): a **Flutter iOS app** with Cursor rules, skills, handoff protocol, and tests. Map/search/optimize logic lives in shared Dart services; **Flutter Web + `tool/places_proxy.dart` are dev-only** for browser testing—not the ship target.
 
 **Related:** For **non-Flutter** projects (browser extensions, backends, etc.), clone [AgenticTemplate](https://github.com/pbuckles22/AgenticTemplate) instead — shared agentic layer without `lib/` / Flutter tooling.
 
@@ -10,8 +10,19 @@ This repo is **Route Optimization** (RouteWise Phase 1): a **web-first** Flutter
 
 ## Source of truth
 
-- **Scope / sprints:** [PM_PLAN.md](PM_PLAN.md)
+- **Contributor entry:** [CONTRIBUTING.md](CONTRIBUTING.md), [doc/PROJECT_STATUS.md](doc/PROJECT_STATUS.md)
+- **Epics / stories:** [doc/plan/](doc/plan/)
+- **Scope / phases:** [PM_PLAN.md](PM_PLAN.md)
 - **Skills:** [.cursor/skills/](.cursor/skills/) — DEV_GUIDE.md, TEST_TDD.md, DESIGN_SYSTEM.md, techwriter, tester, code-reviewer, **code-quality-gate**, **tech-lead**, tech-debt-evaluator, eval-engineer, risk-manager, release-manager, security-reviewer, incident-triager, green-and-clean, context-bootstrapper, session-summarizer, pm-governance, ui-ux, game-readiness, visual-match, **github-feature-workflow**
+
+## Context hierarchy (what belongs where)
+
+Contributors and agents use **tracked docs** for product truth. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+- **Level 1:** CONTRIBUTING, PROJECT_STATUS, `.cursor/rules/always.mdc`, this file
+- **Level 2:** PM_PLAN, TEST_PLAN, `doc/plan/` (active epic)
+- **Level 3:** Current story acceptance criteria in epic file
+- **Level 4 (optional, local only):** `.cursor/handoff/NNNN-handoff-*.md` — gitignored; never sole source of truth
 
 ## Green and clean operating model (how we work)
 
@@ -30,24 +41,38 @@ Skills that enforce this:
 ## Pod (agents always working)
 
 - **Techwriter:** Use when editing README, AGENT_HANDOFF, or internal docs. Keeps docs consistent.
-- **Tester:** Tests are black-box. Run **Tier 1** via `./script/test.sh` (or `flutter test`); **Tier 2** via `./script/test_integration.sh <device_id>` (see [TEST_PLAN.md](TEST_PLAN.md)). Keep the suite green.
+- **Tester:** Black-box. Run **Tier 1** via `bash script/test.sh`; **Tier 2 web E2E** via `bash script/test_e2e_web.sh` (when implemented); **Tier 3 iOS** via `bash script/test_integration.sh <device_id>`. See [TEST_PLAN.md](TEST_PLAN.md). Keep the suite green.
 - **Handoff (mandatory):** When the user wants a handoff, run code review (code-reviewer), tech debt (tech-debt-evaluator), and `flutter test --coverage`; record in the handoff note. See [.cursor/rules/handoff-checklist.mdc](.cursor/rules/handoff-checklist.mdc).
 
 ## Current state
 
-- **App:** Playable RouteWise web prototype on branch `feature/epic-0-s0-1-pubspec-deps` — search (Google Places), stop list, distance optimize (Mapbox `driving`), Google Maps handoff. Keys via `--dart-define=MAPS_API_KEY` / `MAPBOX_ACCESS_TOKEN`. Tier 1: 18 tests green.
-- **Next:** Merge feature branch to `main`; optional Phase 1b traffic profile (`driving-traffic`); docs split (`phase1-spec.md`, `PM_PLAN` epics).
+- **Ship target:** iOS app. See **PM_PLAN.md → Platform strategy** and **doc/PROJECT_STATUS.md**.
+- **App:** RouteWise on **`main`** — search, stop list, Mapbox optimize (`driving`), Google Maps handoff. Epic 0 complete ([doc/plan/epic-0-route-core.md](doc/plan/epic-0-route-core.md)).
+- **Tests:** Tier 1 — 20 green. Tier 2 web E2E planned ([doc/plan/epic-1-e2e-and-ios.md](doc/plan/epic-1-e2e-and-ios.md) E1-S1).
+- **Next:** Epic 1 — Tier 2 web E2E happy path, then iOS location + Tier 3 integration.
 
 ## Run and test
 
+**Primary (iOS — ship target):**
+
 ```bash
 flutter pub get
-flutter run -d chrome --dart-define=MAPS_API_KEY=... --dart-define=MAPBOX_ACCESS_TOKEN=...
-./script/run_web.sh                # Local web server (default port 8080)
-.\script\run_web.ps1               # Windows (reads $env:MAPS_API_KEY, $env:MAPBOX_ACCESS_TOKEN)
-./script/test.sh                    # Tier 1
+flutter run -d <ios_simulator_or_device> \
+  --dart-define=MAPS_API_KEY=... \
+  --dart-define=MAPBOX_ACCESS_TOKEN=...
+./script/test_integration.sh <device_id>   # Tier 3 iOS
+```
+
+**Dev-only (browser harness — not the product):**
+
+```bash
+dart run tool/places_proxy.dart            # required for web search (CORS)
+bash script/run_web.sh                     # http://localhost:8080
+```
+
+```bash
+./script/test.sh                    # Tier 1 (headless)
 ./script/test.sh --coverage         # Tier 1 + coverage (handoff)
-./script/test_integration.sh <id>   # Tier 2 (iOS device/simulator)
 ```
 
 See TEST_PLAN.md for device ID. List devices: `flutter devices`. Web builds: `flutter build web`.

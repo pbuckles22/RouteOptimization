@@ -73,7 +73,7 @@ void main() {
     );
     expect(capturedUri!.queryParameters['access_token'], 'mapbox-token');
     expect(capturedUri!.queryParameters['source'], 'first');
-    expect(capturedUri!.queryParameters['destination'], 'any');
+    expect(capturedUri!.queryParameters['destination'], 'last');
     expect(capturedUri!.queryParameters['roundtrip'], 'false');
 
     expect(result.stops.map((s) => s.uuid), ['a', 'c', 'b']);

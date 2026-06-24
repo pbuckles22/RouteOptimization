@@ -186,10 +186,16 @@ class RouteProvider extends ChangeNotifier {
     if (error is SearchException) {
       return error.message;
     }
+    if (error is OptimizationException) {
+      return error.message;
+    }
     final text = error.toString();
     if (text.contains('Failed to fetch') || text.contains('ClientException')) {
-      return 'Search could not reach the server. Start the places proxy: '
-          'dart run tool/places_proxy.dart';
+      if (kIsWeb) {
+        return 'Search could not reach the server. Start the places proxy: '
+            'dart run tool/places_proxy.dart';
+      }
+      return 'Search could not reach the server. Check your network connection.';
     }
     if (text.contains('Places proxy')) {
       return error.toString().replaceFirst('SearchException: ', '');
